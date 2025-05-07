@@ -1,4 +1,4 @@
-package com.tucusoft.tucsoft;
+package com.tucusoft.tucsoft.model;
 
 import java.util.Date;
 
