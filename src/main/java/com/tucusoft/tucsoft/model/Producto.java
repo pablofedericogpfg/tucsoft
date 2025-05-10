@@ -30,6 +30,8 @@ public class Producto {
     private double precioCosto;
     private double precio;
     private double cantidad;
+    private String estado;
+    private Integer idproducto; 
 
     @ManyToOne
     private Usuario usuario;
