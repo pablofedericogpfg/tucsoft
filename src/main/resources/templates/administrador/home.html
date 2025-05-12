@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-AU-Compatible" content="IE-edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bootstrap - Practicas con b</title>
+    <title>Empresa</title>
     <link
       rel="stylesheet"
-      th:href="@{vendor/bootstrap/css/bootstrap.min.css}"
+      th:href="@{/vendor/bootstrap/css/bootstrap.min.css}"
     />
-    <link rel="stylesheet" th:href="@{css/heroic-features.css}" />
+    <link rel="stylesheet" th:href="@{/css/heroic-features.css}" />
   </head>
 
   <body>
@@ -186,7 +186,7 @@
       </div>
     </main>
     <div th:include="~{administrador/template_admin.html :: footer}"></div>
-    <script th:src="@{vendor/jquery/jquery.min.js}"></script>
-    <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
   </body>
 </html>
