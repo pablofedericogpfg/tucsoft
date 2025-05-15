@@ -15,7 +15,8 @@
 
   <body>
     <div th:include="~{administrador/template_admin.html :: header}"></div>
-    <div th:if="${mensaje}" class="alert alert-success" th:text="${mensaje}"></div>
+    <div th:if="${mensaje}" class="alert alert-success auto-close" data-delay="3" th:text="${mensaje}">
+    </div>
     <!-- Page Content -->
     <div class="container-fluid">
       
@@ -95,6 +96,7 @@
     <!-- Bootstrap core JavaScript -->
     <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/mios/alertas-auto.js}"></script>
 
     <script>
       function confirmarBorrado(id, nombre) {

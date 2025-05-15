@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,7 +16,7 @@ import com.tucusoft.tucsoft.model.Producto;
 import com.tucusoft.tucsoft.model.Usuario;
 
 import com.tucusoft.tucsoft.service.ProductoService;
-
+import com.tucusoft.tucsoft.service.UploadFileService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -36,6 +38,9 @@ private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
     @Autowired
     private ProductoService productoService;
 
+    @Autowired
+    private UploadFileService uploadFileService;
+
     @GetMapping("")
     public String show(Model model) {
         model.addAttribute("productos",productoService.findAll());
@@ -48,11 +53,27 @@ private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Producto producto) {
+    public String save(@ModelAttribute Producto producto,@RequestParam("img") MultipartFile file) {
         //TODO: process POST request
         LOGGER.info("Este es el objeto de la vista {}",producto);
+        if (producto.getId()==null) {
+            producto.setUsuario(Usuario.builder().id(1).codPostal("").direccion("").email("").localidad("").nombre("").build());
+            String nombreImagen=uploadFileService.saveImage(file);
+            producto.setImagen(nombreImagen);
+        } else {
+            if (file.isEmpty()){ // esto es porque no se inyecta la imagencuando se edita el producto entonces vine file vacio
+                Producto p =productoService.get(producto.getId()).get();
+                producto.setImagen(p.getImagen());
+
+            } else {
+                uploadFileService.deleteImage(productoService.get(producto.getId()).get().getImagen());
+                producto.setImagen(uploadFileService.saveImage(file));
+            }
+        }
        
-        //producto.setUsuario(Usuario.builder().id(1).codPostal("").direccion("").email("").localidad("").nombre("").build());
+       
+        
+        
         productoService.save(producto);
 
         return "redirect:/productos";
@@ -71,11 +92,20 @@ private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
 		return "/productos/edit";
 	}
     @PostMapping("/update")
-    public String update(@ModelAttribute Producto producto) {
+    public String update(@ModelAttribute Producto producto,@RequestParam("img") MultipartFile file ) {
         //TODO: process POST request
         LOGGER.info("Este es el objeto de la vista {}",producto);
-       
-        //producto.setUsuario(Usuario.builder().id(1).codPostal("").direccion("").email("").localidad("").nombre("").build());
+             if (file.isEmpty()){ // esto es porque no se inyecta la imagencuando se edita el producto entonces vine file vacio
+                Producto p =productoService.get(producto.getId()).get();
+                producto.setImagen(p.getImagen());
+                 LOGGER.info("No se cargo imagen",producto);
+            } else {
+                LOGGER.info("Imagen antes de modificar",producto);
+                uploadFileService.deleteImage(productoService.get(producto.getId()).get().getImagen());
+                producto.setImagen(uploadFileService.saveImage(file));
+                LOGGER.info("Imagen luego de modificar",producto);
+            }   
+        
         productoService.save(producto);
 
         return "redirect:/productos";
@@ -83,10 +113,12 @@ private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
 
     @PostMapping("/delete/{id}")
 	public String delete(@PathVariable Integer id,RedirectAttributes redirectAttributes) {
+        uploadFileService.deleteImage(productoService.get(id).get().getImagen());
         productoService.delete(id);
         redirectAttributes.addFlashAttribute("mensaje", "Producto eliminado correctamente");
 		
 		return "redirect:/productos";
 	}
+
     
 }
