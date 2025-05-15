@@ -44,11 +44,11 @@ public class Usuario {
     private String localidad;
     private String provincia;
 
-    @OneToMany(mappedBy = "usuario")
+   @OneToMany(mappedBy = "usuario")
     private List<Producto> productos;
-
-     @OneToMany(mappedBy = "usuario")
-    private List<Orden> ordenes;
+	
+	@OneToMany(mappedBy = "usuario")
+	private List<Orden> ordenes;
 
 
 }

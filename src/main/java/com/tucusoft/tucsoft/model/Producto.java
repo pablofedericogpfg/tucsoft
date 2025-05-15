@@ -7,11 +7,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+//import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "productos")
@@ -19,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "usuario")
 @Builder
 public class Producto {
     @Id
@@ -32,8 +35,10 @@ public class Producto {
     private double cantidad;
     private String estado;
     private Integer idproducto; 
+    //private Integer usuario_id;
+    
 
-    @ManyToOne
-    private Usuario usuario;
+   @ManyToOne
+	private Usuario usuario;
 
 }

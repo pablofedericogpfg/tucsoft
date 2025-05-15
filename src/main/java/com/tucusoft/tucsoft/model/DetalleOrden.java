@@ -8,14 +8,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+//import jakarta.persistence.ManyToOne;
+//import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "detallesordenes")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
+
 public class DetalleOrden {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +32,10 @@ public class DetalleOrden {
     private double precio;
     private double total;
 
-    @OneToOne
-    private Orden orden;
-
     @ManyToOne
-    private Producto producto;
+	private Orden orden;
+	
+	@ManyToOne
+	private Producto producto;
 
 }
