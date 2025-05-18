@@ -35,10 +35,13 @@ public class Producto {
     private double cantidad;
     private String estado;
     private Integer idproducto; 
+    private double descuento;
     //private Integer usuario_id;
     
 
    @ManyToOne
 	private Usuario usuario;
-
+    public double getPrecioFinal() {
+        return precio - (precio * descuento / 100.0);
+    }
 }

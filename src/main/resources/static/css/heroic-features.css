@@ -6,3 +6,14 @@
 body {
   padding-top: 56px;
 }
+   @media (max-width: 576px) {
+ /*  .user-img {
+    margin-top: 2.0rem; 
+    
+
+  } */
+  body {
+  padding-top: 150px;
+}
+
+}

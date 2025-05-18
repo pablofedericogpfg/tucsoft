@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class UploadFileService {
 
-    private String folder = "images/7";
+    private String folder = "images//";
 
     public String saveImage(MultipartFile file) {
         if (!file.isEmpty()) {

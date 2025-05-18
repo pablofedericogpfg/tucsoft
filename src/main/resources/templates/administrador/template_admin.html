@@ -3,7 +3,7 @@
   <header>
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top">
       <div class="container-fluid">
-        <a th:href="@{/administrador}" class="navbar-brand"
+        <a th:href="@{/administrador}" class="navbar-brand" th:text="${session.appname}"
           >Nombre Aplicacion</a
         >
         <!-- Barra de BUsqueda -->
@@ -49,22 +49,30 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 id="dropdown-menu"
+                th:text="${session.usuario.nombre}"
+                th:if="${session.usuario.id>0}"
               >
-                ADMIN
               </a>
 
-              <ul class="dropdown-menu" aria-labelledby="dropdown-menu">
+              <ul class="dropdown-menu" aria-labelledby="dropdown-menu" th:each="im, it : ${session.menus}">
+
                 <li>
-                  <a th:href="@{/productos}" class="dropdown-item active">Productos</a>
+                  <a th:href="@{/{p} (p=${im.destino})}" style="width: auto;"  class="dropdown-item" th:text="${im.menu}" 
+                  th:classappend="${it.index==0 ? 'active' : ''}" 
+                  ></a>
                 </li>
-                <li><a href="" class="dropdown-item">Laptops</a></li>
+                
+
+             
+               <!--  <li><a href="" class="dropdown-item">Laptops</a></li>
                 <li><a href="" class="dropdown-item">Smartphones</a></li>
                 <li><a href="" class="dropdown-item">Drones</a></li>
-                <li><a href="" class="dropdown-item">Accesorios</a></li>
+                <li><a href="" class="dropdown-item">Accesorios</a></li> -->
+
               </ul>
             </li>
 
-            <!-- <li class="nav-item"><a href="" class="nav-link">Contacto</a></li> -->
+            <li class="nav-item " th:if="${session.usuario.id==0}"><a href="" class="nav-link">Login</a></li>
           </ul>
         </div>
       </div>

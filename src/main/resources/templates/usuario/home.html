@@ -51,17 +51,7 @@
     .carousel-testimony .owl-dots .owl-dot.active span {
       background: #0d6efd;
     }
-    @media (max-width: 576px) {
- /*  .user-img {
-    margin-top: 2.0rem; 
-    
-
-  } */
-  body {
-  padding-top: 150px;
-}
-
-}
+ 
   </style>
   </head>
 
@@ -107,8 +97,8 @@
 
       <div class="row">
 
-        <div class="col-12 col-sm-6 col-lg-3 mb-4 " th:each="producto : ${productos}">
-          <div class="card" >
+        <div class="col-12 col-sm-6 col-lg-3 mb-4" th:each="producto : ${productos}">
+          <div class="card">
             <img class="card-img-top" style="width: 200px;height:200px;" th:src="@{/images/{img} (img=${producto.imagen})}" alt="imagen" />
             <div class="card-body">
               <h3 class="card-title" th:text="${producto.nombre}"></h3>
@@ -124,11 +114,12 @@
                 </p>
                 <p class="badge bg-danger fs-5" th:if="${producto.descuento > 0}" 
                   th:text="${producto.descuento + '% OFF'}"></p>
-                <p class="badge bg-danger fs-5" th:unless="${producto.descuento > 0}" 
-                  >S/Descto</p>  
-              </div>              
-              <a href="" class="btn btn-sm btn-primary">Comprar</a>
-              <a href="" class="btn btn-sm btn-secondary">Detalles</a>
+                  <!-- <p class="badge bg-danger fs-5" th:unless="${producto.descuento > 0}" 
+                  >S/Descto</p>  --> 
+              </div>          
+               <a th:href="@{productohome/{id} (id=${producto.id})}" class="btn btn-sm btn-secondary">Detalles</a>    
+              <a href="" class="btn btn-outline-success fw-bold">Comprar</a>
+             
             </div>
           </div>
         </div>
