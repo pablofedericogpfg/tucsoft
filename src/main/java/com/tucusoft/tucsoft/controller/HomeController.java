@@ -35,6 +35,7 @@ public class HomeController {
         List<Menu> menus= List.of(
             new Menu(0,"prueba","descripcion prueba","ira")
         );
+        session.setAttribute("homedelusuario", "");
         session.setAttribute("appname", "Ecomerce Prueba");
         session.setAttribute("usuario", Usuario.builder().id(0).nombre("Usuario").email("").build());
 

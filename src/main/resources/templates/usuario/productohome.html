@@ -17,7 +17,7 @@
 	 <div th:include="~{administrador/template_admin.html :: header}"></div>
 
 	<!-- Page Content -->
-	<div class="container-fluid">
+	<div class="container">
 
 
 		<!-- Page Heading/Breadcrumbs -->
@@ -48,10 +48,12 @@
 								<li class="list-group-item">
 									<div class="mt-auto">
 										<p class="mb-1">
-										<span class="text-decoration-line-through text-muted me-2 fs-4" 
+											Precio: 
+											<span class="text-decoration-line-through text-muted me-2 fs-4" 
 												th:if="${producto.descuento > 0}" 
-												th:text="'$' + ${producto.precio}"></span>
-										<span class="fw-bold text-success fs-4" th:text="'$' + ${#numbers.formatCurrency(producto.precioFinal)}"></span>
+												th:text="'$' + ${producto.precio}">
+											</span>
+											<span class="fw-bold text-success fs-4" th:text="'$' + ${#numbers.formatCurrency(producto.precioFinal)}"></span>
 										</p>
 										<p class="badge bg-danger fs-5" th:if="${producto.descuento > 0}" 
 										th:text="${producto.descuento + '% OFF'}"></p>

@@ -36,6 +36,9 @@ public class Producto {
     private String estado;
     private Integer idproducto; 
     private double descuento;
+    private Integer idrubro;
+    private Integer idmarca;
+    private Integer idproveedo;
     //private Integer usuario_id;
     
 

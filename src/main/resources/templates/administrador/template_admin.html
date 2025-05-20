@@ -3,7 +3,7 @@
   <header>
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top">
       <div class="container-fluid">
-        <a th:href="@{/administrador}" class="navbar-brand" th:text="${session.appname}"
+        <a th:href="@{/{pr} (pr=${homedelusuario})}" class="navbar-brand" th:text="${session.appname}"
           >Nombre Aplicacion</a
         >
         <!-- Barra de BUsqueda -->

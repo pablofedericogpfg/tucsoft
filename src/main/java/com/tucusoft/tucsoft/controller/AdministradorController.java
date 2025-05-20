@@ -25,6 +25,7 @@ public class AdministradorController {
     public String home(HttpSession session, Model model) {
         List<Menu> menus = List.of(
                 new Menu(1, "Productos", "Ver Productos", "productos"));
+        session.setAttribute("homedelusuario", "administrador");
         model.addAttribute("productos", productoService.findAll());
         // model.addAttribute("menu1", "productos");
         // model.addAttribute("usuario", "ADMIN");

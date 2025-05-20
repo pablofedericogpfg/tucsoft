@@ -48,8 +48,8 @@
               <td style="width: 50px;"><img class="card-img-fluid" style="width: 50px;height:50px;"  th:src="@{/images/{img} (img=${producto.imagen})}" alt=""></td>
               <td th:text="${producto.nombre}" ></td>
               <td th:text="${producto.descripcion}" ></td>
-              <td th:text="${producto.cantidad}"></td>
-              <td th:text="${producto.precio}"></td>
+              <td th:text="${#numbers.formatDecimal(producto.cantidad,1,4,'COMMA')}"></td>
+              <td th:text="${#numbers.formatDecimal(producto.precio,1,'POINT',2,'COMMA')}"></td>
               <td><a class="btn btn-sm btn-warning" th:href="@{/productos/edit/{id} (id=${producto.id})}" >Editar</a></td>
               <td>
                 <button class="btn btn-danger btn-sm"

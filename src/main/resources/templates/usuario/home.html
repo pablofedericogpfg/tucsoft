@@ -101,25 +101,33 @@
           <div class="card">
             <img class="card-img-top" style="width: 200px;height:200px;" th:src="@{/images/{img} (img=${producto.imagen})}" alt="imagen" />
             <div class="card-body">
-              <h3 class="card-title" th:text="${producto.nombre}"></h3>
-              <p class="card-text" th:text="${producto.descripcion}">
-                
-              </p>
-              <div class="mt-auto" style="height: 80px;">
-                <p class="mb-1">
-                  <span class="text-decoration-line-through text-muted me-2 fs-4" 
-                        th:if="${producto.descuento > 0}" 
-                        th:text="'$' + ${producto.precio}"></span>
-                  <span class="fw-bold text-success fs-4" th:text="'$' + ${#numbers.formatCurrency(producto.precioFinal)}"></span>
+              <form th:action="@{/cart}" method="POST">
+                <input type="hidden" th:value="${producto.id}" name="id">
+                <h3 class="card-title" th:text="${producto.nombre}"></h3>
+                <p class="card-text" th:text="${producto.descripcion}">
+                  
                 </p>
-                <p class="badge bg-danger fs-5" th:if="${producto.descuento > 0}" 
-                  th:text="${producto.descuento + '% OFF'}"></p>
-                  <!-- <p class="badge bg-danger fs-5" th:unless="${producto.descuento > 0}" 
-                  >S/Descto</p>  --> 
-              </div>          
-               <a th:href="@{productohome/{id} (id=${producto.id})}" class="btn btn-sm btn-secondary">Detalles</a>    
-              <a href="" class="btn btn-outline-success fw-bold">Comprar</a>
-             
+                <div class="mt-auto" style="height: 80px;">
+                  <p class="mb-1">
+                    <span class="text-decoration-line-through text-muted me-2 fs-4" 
+                          th:if="${producto.descuento > 0}" 
+                          th:text="'$' + ${producto.precio}"></span>
+                    <span class="fw-bold text-success fs-4" th:text="'$' + ${#numbers.formatCurrency(producto.precioFinal)}"></span>
+                  </p>
+                  <p class="badge bg-danger fs-5" th:if="${producto.descuento > 0}" 
+                    th:text="${producto.descuento + '% OFF'}"></p>
+                    <!-- <p class="badge bg-danger fs-5" th:unless="${producto.descuento > 0}" 
+                    >S/Descto</p>  --> 
+                </div>          
+                <a th:href="@{productohome/{id} (id=${producto.id})}" class="btn btn-sm btn-secondary">Detalles</a>    
+                <div class="mt-4">
+                <h6>
+                      Cantidad: <input type="number" id="cantidad" name="cantidad"
+                        autocomplete="off" min="1" max="500" value="1">
+                    </h6>
+                <button type="submit" class="btn btn-outline-success fw-bold" >Añadir al carrito</button>
+                </div>
+             </form>
             </div>
           </div>
         </div>
