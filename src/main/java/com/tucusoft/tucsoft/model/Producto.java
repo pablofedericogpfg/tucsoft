@@ -2,11 +2,15 @@ package com.tucusoft.tucsoft.model;
 
 
 
+import com.tucusoft.tucsoft.controller.ImagenesProductos;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 //import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -44,8 +48,12 @@ public class Producto {
 
    @ManyToOne
 	private Usuario usuario;
+
     public double getPrecioFinal() {
         return precio - (precio * descuento / 100.0);
     }
     
+    //@JoinColumn(name="idproducto")
+    @OneToOne
+    private ImagenesProductos imagenProducto; 
 }
