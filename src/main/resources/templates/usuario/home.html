@@ -63,24 +63,26 @@
      
       <div class="row" >
         <div class="col">
-          <h1 class="text-center">Ofertas</h1>
+          <h1 class="text-center">Proveedores</h1>
         </div>
         <div class="col">
           
           <div class="carousel-testimony owl-carousel ftco-owl">
-              <div class="item" th:each="t : ${productos}">
+              <div class="item" th:each="t : ${proveedores}">
                 <div class="testimony-wrap bg-white p-4 d-flex flex-column align-items-center text-center h-100">
-                  <div class="user-img mb-3"
-                      th:style="'background-image: url(/images/' + ${t.imagen} + ');'">
-                  </div>
-                  <p class="mb-3 fst-italic" th:text="${t.descripcion}">"Comentario"</p>
+                  <a href="" class="btn">
+                    <div class="user-img mb-3"
+                        th:style="'background-image: url(/images/' + ${t.imagen} + ');'">
+                    </div>
+                  </a>
+                  <p class="mb-3 fst-italic" th:text="${t.Nombre}">"Comentario"</p>
                   <!-- <div class="mb-2">
                     <i class="bi bi-star-fill text-warning" th:each="i : ${#numbers.sequence(1, t.estrellas)}"></i>
                     <i class="bi bi-star text-muted" th:each="i : ${#numbers.sequence(t.estrellas + 1, 5)}"></i>
                   </div> -->
                   <p class="name mb-1 fw-bold" th:text="${t.nombre}">Nombre</p>
                   <!-- <span class="position text-muted mb-3" th:text="${t.rol}">Rol</span> -->
-                  <a href="#" class="btn btn-outline-primary btn-sm">Leer más</a>
+                  <a href="#" class="btn btn-outline-primary btn-sm">Ver Productos</a>
                 </div>
               </div>
             </div>

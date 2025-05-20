@@ -9,13 +9,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.tucusoft.tucsoft.model.Menu;
 import com.tucusoft.tucsoft.model.Usuario;
 import com.tucusoft.tucsoft.service.ProductoService;
+import com.tucusoft.tucsoft.service.ProveedorService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -29,6 +34,9 @@ public class HomeController {
 
     @Autowired
     private ProductoService productoService;
+    
+    @Autowired
+    private ProveedorService proveedorService;
 
     @GetMapping("")
     public String home( HttpSession session,Model model){
@@ -41,6 +49,7 @@ public class HomeController {
 
         //model.addAttribute("usuario", "USUARIO"); 
         model.addAttribute("productos", productoService.findAll());
+        model.addAttribute("proveedores", proveedorService.findAll());
         //model.addAttribute("menu1", "Opciones");    
             
         session.setAttribute("menus", menus);
@@ -52,6 +61,13 @@ public class HomeController {
         model.addAttribute("producto", productoService.get(id).get());
         
         return "usuario/productohome.html";
+    }
+    
+    @PostMapping("path")
+    public String postMethodName(@PathVariable Integer id,@PathVariable double cantidad) {
+        //TODO: process POST request
+        
+        return "usuario/carrito";
     }
     
 

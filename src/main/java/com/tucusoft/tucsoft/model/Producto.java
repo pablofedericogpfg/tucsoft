@@ -47,4 +47,5 @@ public class Producto {
     public double getPrecioFinal() {
         return precio - (precio * descuento / 100.0);
     }
+    
 }
