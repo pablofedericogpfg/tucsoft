@@ -1,5 +1,6 @@
 package com.tucusoft.tucsoft.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.tucusoft.tucsoft.model.DetalleOrden;
 import com.tucusoft.tucsoft.model.Menu;
+import com.tucusoft.tucsoft.model.Orden;
+import com.tucusoft.tucsoft.model.Producto;
 import com.tucusoft.tucsoft.model.Usuario;
 import com.tucusoft.tucsoft.service.ProductoService;
 import com.tucusoft.tucsoft.service.ProveedorService;
@@ -31,6 +36,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class HomeController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
+
+
+    private List<DetalleOrden> detalleOrdenes=new ArrayList<DetalleOrden>();
+    private Orden orden =new Orden();
 
     @Autowired
     private ProductoService productoService;
@@ -63,9 +72,34 @@ public class HomeController {
         return "usuario/productohome.html";
     }
     
-    @PostMapping("path")
-    public String postMethodName(@PathVariable Integer id,@PathVariable double cantidad) {
+    @PostMapping("cart")
+    public String addCart(@RequestParam Integer id,@RequestParam double cantidad,Model model)  {
         //TODO: process POST request
+
+        Producto producto=productoService.get(id).get();
+        DetalleOrden detalleOrden=new DetalleOrden();
+        double sumaTota=0;
+       
+        detalleOrden.setCantidad(cantidad);
+        detalleOrden.setProducto(producto);
+        detalleOrden.setPrecio(producto.getPrecioFinal());
+        detalleOrden.setTotal(producto.getPrecioFinal()*cantidad);
+        detalleOrden.setNombre(producto.getNombre());
+        detalleOrdenes.add(detalleOrden); 
+        sumaTota=detalleOrdenes.stream().mapToDouble(dt->dt.getTotal()).sum();
+        orden.setTotal(sumaTota);
+       
+        
+         orden.setTotal(sumaTota);
+        LOGGER.info("detalle item {}",detalleOrden);
+        LOGGER.info("producto Item {}",producto);
+        LOGGER.info("cantidad {}", cantidad);
+        LOGGER.info("Items de Detalleordenes", detalleOrdenes);
+
+        model.addAttribute("cart",detalleOrdenes);
+        model.addAttribute("orden", orden);
+
+
         
         return "usuario/carrito";
     }

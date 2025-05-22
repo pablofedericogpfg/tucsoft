@@ -56,7 +56,7 @@
   </head>
 
   <body>
-    <div th:include="~{administrador/template_admin.html :: header}"></div>
+    <div th:replace="~{administrador/template_admin.html :: header}"></div>
 
     <!-- main  -->
     <main class="container-fluid">
@@ -139,7 +139,7 @@
    
     
     </main>
-    <div th:include="~{administrador/template_admin.html :: footer}"></div>
+    <div th:replace="~{administrador/template_admin.html :: footer}"></div>
     <script th:src="@{/vendor/jquery/jquery-3.6.0.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/owl.carousel.min.js}"></script>

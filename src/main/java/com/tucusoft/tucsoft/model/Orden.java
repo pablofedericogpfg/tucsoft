@@ -34,12 +34,15 @@ public class Orden {
     private Date fechaRecibida;
 
     private double total;
-
+    
    @ManyToOne
 	private Usuario usuario;
 	
 	@OneToMany(mappedBy = "orden")
 	private List<DetalleOrden> detalle;
+
+ 
+    
 
 
 

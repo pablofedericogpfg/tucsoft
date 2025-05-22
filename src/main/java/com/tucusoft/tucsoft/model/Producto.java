@@ -53,7 +53,7 @@ public class Producto {
         return precio - (precio * descuento / 100.0);
     }
     
-    //@JoinColumn(name="idproducto")
+    //
     @OneToOne
-    private ImagenesProductos imagenProducto; 
+    private ImagenesProductos imagenProducto;  
 }

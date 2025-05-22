@@ -17,7 +17,7 @@
 
 <body>
 
-  <div th:include="~{administrador/template_admin.html :: header}"></div>
+  <div th:replace="~{administrador/template_admin.html :: header}"></div>
 
 <!-- Page Content -->
 <div class="container-fluid">
@@ -94,7 +94,7 @@
 <!-- /.container -->
 
  <!-- Footer -->
- <div th:include="~{administrador/template_admin.html :: footer}"></div>
+ <div th:replace="~{administrador/template_admin.html :: footer}"></div>
 
  <!-- Bootstrap core JavaScript -->
  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
