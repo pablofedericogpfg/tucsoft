@@ -34,6 +34,7 @@ public class Orden {
     private Date fechaRecibida;
 
     private double total;
+    private Integer totalitems;
     
    @ManyToOne
 	private Usuario usuario;
@@ -41,7 +42,7 @@ public class Orden {
 	@OneToMany(mappedBy = "orden")
 	private List<DetalleOrden> detalle;
 
- 
+   
     
 
 

@@ -21,6 +21,10 @@
             Buscar
           </button>
         </form>
+        <!-- carrito de compras -->
+
+ 
+         
         <!--    Boton para el menu Movil  -->
         <button
           class="navbar-toggler"
@@ -73,6 +77,32 @@
             </li>
 
             <li class="nav-item " th:if="${session.usuario.id==0}"><a href="" class="nav-link">Login</a></li>
+            <li class="nav-item dropdown" th:if="${orden.totalitems>0}">
+              <div class="d-flex">
+              <a th:href="@{/carrito}" class="btn btn-outline-primary dropdown-toggle"
+                     id="carritoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  🛒 Carrito (<span th:text="${orden.totalitems}"></span>)
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="carritoDropdown">
+                        <li th:if="${#lists.isEmpty(cart)}">
+                            <span class="dropdown-item">Carrito vacío</span>
+                        </li>
+                        <li th:each="item : ${cart}">
+                            <span class="dropdown-item">
+                                <img class="card-img-fluid" style="width: 50px;height:50px;"  th:src="@{/images/{img} (img=${item.producto.imagen})}" alt="">
+                                <span th:text="${item.nombre}">Producto</span> - $<span th:text="${#numbers.formatDecimal(item.precio,1,'POINT',2,'COMMA')}">0.0</span>
+                                - Ctd: <span th:text="${item.Cantidad}">0.0</span>
+
+                            </span>
+                            
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>Total $ <h4><span class="text-center" style="color: chocolate;" th:text="${#numbers.formatDecimal(orden.total,1,'POINT',2,'COMMA')}">0.0</span></h4></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center" th:href="@{/carrito}">Ver carrito completo</a></li>
+                    </ul>
+              </div>
+            </li>
           </ul>
         </div>
       </div>
