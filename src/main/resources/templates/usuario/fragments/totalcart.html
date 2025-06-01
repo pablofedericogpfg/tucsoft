@@ -1,0 +1,4 @@
+<!-- src/main/resources/templates/usuario/fragments/totalcarrito.html -->
+<div th:fragment="totalFragment(total)">
+    Total $ <h4><span class="text-center" style="color: chocolate;" th:text="${#numbers.formatDecimal(total,1,'POINT',2,'COMMA')}">0.0</span></h4>
+</div>

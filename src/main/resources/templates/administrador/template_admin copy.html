@@ -1,7 +1,6 @@
 <!--   header  -->
 <div th:fragment="header">
   <header>
- 
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top">
       <div class="container-fluid">
         <a th:href="@{/{pr} (pr=${homedelusuario})}" class="navbar-brand" th:text="${session.appname}"
@@ -94,22 +93,20 @@
                               <td><span th:text="${item.nombre}">Producto</span></td>
                               <td>$ <span th:text="${#numbers.formatDecimal(item.precio,1,'POINT',2,'COMMA')}">0.0</span></td>
                               <td>
-                              
+                                <form th:action="@{/cart}" method="POST">
+                                  <input type="hidden" th:value="${item.producto.id}" name="id">
                                   <span class="dropdown-item">
                                      <h6>
                                         Ctd: <input type="number" id="cantidad" name="cantidad" th:value="${item.cantidad}"
-                                          autocomplete="off" min="1" max="500" value="1" 
-                                          th:onchange="actualizarCantidad([[${item.producto.id}]], this.value)">
-                                         <!--  th:onchange="'javascript:actualizarCantidad(${item.producto.id},this.value)'" -->
+                                          autocomplete="off" min="1" max="500" value="1" onchange="this.form.submit()">
                                       </h6>
                                   </span>
-                                
+                                </form>  
                               </td>
                            </tr>
                         </li>
                         <li><hr class="dropdown-divider"></li>
-                        <!-- <li><div id="resumen-carrito" th:replace="/usuario/fragments/totalcart :: totalFragment(${orden.total})"></div></li> -->
-                        <li>Total $ <h4><span id="resumen-carrito" class="text-center" style="color: chocolate;" th:text="${#numbers.formatDecimal(orden.total,1,'POINT',2,'COMMA')}">0.0</span></h4></li> 
+                        <li>Total $ <h4><span class="text-center" style="color: chocolate;" th:text="${#numbers.formatDecimal(orden.total,1,'POINT',2,'COMMA')}">0.0</span></h4></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-center" th:href="@{/carrito}">Ver carrito completo</a></li>
                     </ul>
@@ -119,30 +116,6 @@
         </div>
       </div>
     </nav>
-    <script>
-        function actualizarCantidad(productoId, cantidad) {
-          //alert(" Producto " + productoId +" cantidad "+ cantidad)
-          const params = {
-            id: productoId,
-            cantidad: cantidad
-          };
-
-          const urlParams = new URLSearchParams(params).toString();
-            fetch(`/cartcarrito?${urlParams}`, {
-                method: 'POST', // or 'POST' depending on your needs
-                headers: {'Content-Type': 'application/json'},
-                  body: JSON.stringify({ id: productoId, cantidad: cantidad })
-              })
-            .then(response => response.text())
-            .then(html => {
-                //alert(html);
-                //orden.total=+html
-                document.getElementById('resumen-carrito').textContent  = html;
-                
-            })
-            .catch(err => alert('Error:'+ err));
-        }
-    </script>    
   </header>
 </div>
 <div th:fragment="footer">
@@ -176,5 +149,4 @@
     </div>
     <!-- /.container -->
   </footer>
- 
 </div>

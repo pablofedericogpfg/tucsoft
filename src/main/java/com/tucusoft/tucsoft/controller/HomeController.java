@@ -1,5 +1,6 @@
 package com.tucusoft.tucsoft.controller;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.tucusoft.tucsoft.model.DetalleOrden;
@@ -24,7 +28,6 @@ import com.tucusoft.tucsoft.service.ProveedorService;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/")
@@ -34,6 +37,9 @@ public class HomeController {
 
     private List<DetalleOrden> detalleOrdenes = new ArrayList<DetalleOrden>();
     private Orden orden = new Orden();
+    private Usuario usuario = Usuario.builder().id(0).nombre("Usuario").email("").direccion("Junin 785").build();
+    private String homedelusuario = "";
+    private String appname = "Ecomerce Prueba";
 
     @Autowired
     private ProductoService productoService;
@@ -41,13 +47,16 @@ public class HomeController {
     @Autowired
     private ProveedorService proveedorService;
 
+    @Autowired
+    private TemplateEngine templateEngine;
+
     @GetMapping("")
     public String home(HttpSession session, Model model) {
         List<Menu> menus = List.of(
                 new Menu(0, "prueba", "descripcion prueba", "ira"));
-        session.setAttribute("homedelusuario", "");
-        session.setAttribute("appname", "Ecomerce Prueba");
-        session.setAttribute("usuario", Usuario.builder().id(0).nombre("Usuario").email("").build());
+        session.setAttribute("homedelusuario", homedelusuario);
+        session.setAttribute("appname", appname);
+        session.setAttribute("usuario", usuario);
 
         // model.addAttribute("usuario", "USUARIO");
         model.addAttribute("productos", productoService.findAll());
@@ -57,7 +66,7 @@ public class HomeController {
         session.setAttribute("menus", menus);
         model.addAttribute("cart", detalleOrdenes);
         model.addAttribute("orden", orden);
-          LOGGER.info("detalle Ordenes Actualizado {}", detalleOrdenes);
+        LOGGER.info("detalle Ordenes Actualizado {}", detalleOrdenes);
         return "usuario/home";
     }
 
@@ -73,19 +82,19 @@ public class HomeController {
         // TODO: process POST request
 
         Producto producto = productoService.get(id).get();
-        boolean existeprod =false;
+        boolean existeprod = false;
         for (DetalleOrden dt : detalleOrdenes) {
             if (dt.getProducto().getId() == id) {
                 dt.setCantidad(cantidad);
-                dt.setTotal(cantidad*dt.getPrecio());
-                existeprod=true;
-                 LOGGER.info("cambio la detalle item {}", dt);
+                dt.setTotal(cantidad * dt.getPrecio());
+                existeprod = true;
+                LOGGER.info("cambio la detalle item {}", dt);
+                break;
 
             }
         }
-        if (existeprod==false) {
+        if (existeprod == false) {
             DetalleOrden detalleOrden = new DetalleOrden();
-           
 
             detalleOrden.setCantidad(cantidad);
             detalleOrden.setProducto(producto);
@@ -95,7 +104,7 @@ public class HomeController {
             detalleOrdenes.add(detalleOrden);
             LOGGER.info("detalle item {}", detalleOrden);
             LOGGER.info("producto Item {}", producto);
-            LOGGER.info("cantidad {}", cantidad);            
+            LOGGER.info("cantidad {}", cantidad);
         }
         double sumaTota = 0;
         sumaTota = detalleOrdenes.stream().mapToDouble(dt -> dt.getTotal()).sum();
@@ -104,16 +113,15 @@ public class HomeController {
 
         orden.setTotal(sumaTota);
 
- 
         LOGGER.info("Items de Detalleordenes", detalleOrdenes);
 
         model.addAttribute("cart", detalleOrdenes);
         model.addAttribute("orden", orden);
 
-      
-
         // return "usuario/carrito";
         return "redirect:/";
+        // return "/usuario/fragments/totalcarrito :: totalFragment";
+
     }
 
     @GetMapping("delete/cart/{id}")
@@ -133,7 +141,7 @@ public class HomeController {
 
         Double sumaTota = detalleOrdenes.stream().mapToDouble(dt -> dt.getTotal()).sum();
         orden.setTotal(sumaTota);
-         orden.setTotalitems(detalleOrdenes.size());
+        orden.setTotalitems(detalleOrdenes.size());
         model.addAttribute("cart", detalleOrdenes);
         model.addAttribute("orden", orden);
         // return "usuario/carrito";
@@ -146,6 +154,60 @@ public class HomeController {
         model.addAttribute("orden", orden);
         /*  */
         return "usuario/carrito";
+    }
+
+    @PostMapping("cartcarrito")
+    @ResponseBody
+    public String addCartCarrito(@RequestParam Integer id, @RequestParam double cantidad,Model model ) {
+        // TODO: process POST request
+
+        Producto producto = productoService.get(id).get();
+
+        for (DetalleOrden dt : detalleOrdenes) {
+            if (dt.getProducto().getId() == id) {
+                dt.setCantidad(cantidad);
+                dt.setTotal(cantidad * dt.getPrecio());
+                LOGGER.info("cambio la detalle item {}", dt);
+                break;
+
+            }
+        }
+
+        double sumaTota = 0;
+        sumaTota = detalleOrdenes.stream().mapToDouble(dt -> dt.getTotal()).sum();
+        orden.setTotal(sumaTota);
+        orden.setTotalitems(detalleOrdenes.size());
+
+        orden.setTotal(sumaTota);
+
+        LOGGER.info("Items de Detalleordenes {}", detalleOrdenes);
+
+     /*    Context context = new Context();
+        context.setVariable("cart", detalleOrdenes);
+        context.setVariable("orden", orden);
+
+        
+
+        String totalHtml = templateEngine.process("usuario/fragments/totalcart :: totalFragment", context); */
+        model.addAttribute("cart", detalleOrdenes);
+        model.addAttribute("orden", orden);
+        // return "usuario/carrito";
+        // return "redirect:/";
+        // return totalHtml;
+        String str = new DecimalFormat("#.00#").format(sumaTota);
+        LOGGER.info("total {}", str);
+        return str;
+
+    }
+
+    @GetMapping("order")
+    public String orden(HttpSession session, Model model) {
+        // LOGGER.info("Usuario {}", session.getAttribute("usuario"));
+        // model.addAttribute(session.getAttribute("usuario"));
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("cart", detalleOrdenes);
+        model.addAttribute("orden", orden);
+        return "usuario/resumenorden";
     }
 
 }
