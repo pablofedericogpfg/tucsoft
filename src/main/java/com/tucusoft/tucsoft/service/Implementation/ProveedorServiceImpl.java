@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tucusoft.tucsoft.model.Proveedor;
-import com.tucusoft.tucsoft.repository.ProveedorRepository;
+import com.tucusoft.tucsoft.repository.IProveedorRepository;
 import com.tucusoft.tucsoft.service.ProveedorService;
 
 @Service
 public class ProveedorServiceImpl implements ProveedorService {
 
     @Autowired
-    ProveedorRepository proveedorRepository;
+    IProveedorRepository proveedorRepository;
 
     @Override
     public Proveedor save(Proveedor proveedor) {

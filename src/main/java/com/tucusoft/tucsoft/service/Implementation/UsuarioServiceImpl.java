@@ -4,15 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.tucusoft.tucsoft.model.Usuario;
-import com.tucusoft.tucsoft.repository.UsuarioRepository;
+import com.tucusoft.tucsoft.repository.IUsuarioRepository;
 import com.tucusoft.tucsoft.service.UsuarioService;
 
+@Service
 public class UsuarioServiceImpl implements UsuarioService{
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private IUsuarioRepository usuarioRepository;
 
     @Override
     public Usuario save(Usuario usuario) {

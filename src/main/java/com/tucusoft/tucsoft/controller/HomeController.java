@@ -25,6 +25,7 @@ import com.tucusoft.tucsoft.model.Producto;
 import com.tucusoft.tucsoft.model.Usuario;
 import com.tucusoft.tucsoft.service.ProductoService;
 import com.tucusoft.tucsoft.service.ProveedorService;
+import com.tucusoft.tucsoft.service.UsuarioService;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,6 +47,9 @@ public class HomeController {
 
     @Autowired
     private ProveedorService proveedorService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Autowired
     private TemplateEngine templateEngine;

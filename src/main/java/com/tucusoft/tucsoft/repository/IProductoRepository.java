@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 import com.tucusoft.tucsoft.model.Producto;
 
 @Repository
-public interface ProductoRepository extends JpaRepository<Producto, Integer>{
+public interface IProductoRepository extends JpaRepository<Producto, Integer>{
 
 }

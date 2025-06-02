@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tucusoft.tucsoft.model.Producto;
-import com.tucusoft.tucsoft.repository.ProductoRepository;
+import com.tucusoft.tucsoft.repository.IProductoRepository;
 import com.tucusoft.tucsoft.service.ProductoService;
 
 @Service
 public class ProductoServiceImpl implements ProductoService{
 
     @Autowired
-    ProductoRepository productoRepository;
+    IProductoRepository productoRepository;
     @Override
 	public Producto save(Producto producto) {
 		return productoRepository.save(producto);

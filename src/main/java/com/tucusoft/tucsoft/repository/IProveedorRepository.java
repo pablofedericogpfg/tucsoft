@@ -1,9 +1,11 @@
 package com.tucusoft.tucsoft.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.tucusoft.tucsoft.model.Proveedor;
 
-public interface ProveedorRepository extends JpaRepository<Proveedor,Integer> {
+@Repository
+public interface IProveedorRepository extends JpaRepository<Proveedor,Integer> {
 
 }
