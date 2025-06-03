@@ -2,6 +2,7 @@ package com.tucusoft.tucsoft.controller;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -23,12 +24,16 @@ import com.tucusoft.tucsoft.model.Menu;
 import com.tucusoft.tucsoft.model.Orden;
 import com.tucusoft.tucsoft.model.Producto;
 import com.tucusoft.tucsoft.model.Usuario;
+import com.tucusoft.tucsoft.service.DetalleOrdenService;
 import com.tucusoft.tucsoft.service.ProductoService;
 import com.tucusoft.tucsoft.service.ProveedorService;
 import com.tucusoft.tucsoft.service.UsuarioService;
+import com.tucusoft.tucsoft.service.Implementation.OrdenService;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 @RequestMapping("/")
@@ -36,23 +41,29 @@ public class HomeController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
-    private List<DetalleOrden> detalleOrdenes = new ArrayList<DetalleOrden>();
-    private Orden orden = new Orden();
-    private Usuario usuario = Usuario.builder().id(0).nombre("Usuario").email("").direccion("Junin 785").build();
-    private String homedelusuario = "";
-    private String appname = "Ecomerce Prueba";
+  
 
     @Autowired
     private ProductoService productoService;
 
     @Autowired
     private ProveedorService proveedorService;
-
+ 
     @Autowired
     private UsuarioService usuarioService;
 
     @Autowired
-    private TemplateEngine templateEngine;
+    private OrdenService ordenService;
+
+    @Autowired
+    private DetalleOrdenService detalleOrdenService;
+ 
+  private List<DetalleOrden> detalleOrdenes = new ArrayList<DetalleOrden>();
+    private Orden orden = new Orden();
+    //private  Usuario usuario = usuarioService.get(2).get();
+    private Usuario usuario = Usuario.builder().id(2).nombre("Usuario").email("").direccion("Junin 785").build();
+    private String homedelusuario = "";
+    private String appname = "Ecomerce Prueba";
 
     @GetMapping("")
     public String home(HttpSession session, Model model) {
@@ -148,8 +159,8 @@ public class HomeController {
         orden.setTotalitems(detalleOrdenes.size());
         model.addAttribute("cart", detalleOrdenes);
         model.addAttribute("orden", orden);
-        // return "usuario/carrito";
-        return "usuario/home";
+        return "usuario/carrito";
+        //return "usuario/home";
     }
 
     @GetMapping("carrito")
@@ -214,4 +225,23 @@ public class HomeController {
         return "usuario/resumenorden";
     }
 
+  @GetMapping("saveorder")
+  public String saveorder() {
+    Date fechaCreacion=new Date();
+    orden.setFechaCreacion(fechaCreacion);
+    orden.setNumero( ordenService.generarNumeroOrden());
+    orden.setUsuario(usuario);
+    //aparentemente no hace falta asignar orden xq pasa como referencia
+    ordenService.save(orden);
+    for(DetalleOrden dt:detalleOrdenes){
+        dt.setOrden(orden);
+        detalleOrdenService.save(dt);
+    }
+    orden=new Orden();
+    detalleOrdenes.clear();
+
+    
+      return "redirect:/";
+  }
+  
 }

@@ -45,7 +45,7 @@
           </thead>
           <tbody>
             <tr th:each="producto:${productos}">
-              <td style="width: 50px;"><img class="card-img-fluid" style="width: 50px;height:50px;"  th:src="@{/images/{img} (img=${producto.imagen})}" alt=""></td>
+              <td style="width: 50px;"><img class="card-img-fluid" style="width: 30px;height:30px;"  th:src="@{/images/{img} (img=${producto.imagen})}" alt=""></td>
               <td th:text="${producto.nombre}" ></td>
               <td th:text="${producto.descripcion}" ></td>
               <td th:text="${#numbers.formatDecimal(producto.cantidad,1,4,'COMMA')}"></td>
