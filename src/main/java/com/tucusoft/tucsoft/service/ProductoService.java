@@ -14,6 +14,8 @@ public interface ProductoService {
 	public void update(Producto producto);
 	public void delete(Integer id);
 	public List<Producto> findAll();
+	public List<Producto> buscarPorNombre(@Param("busqueda") String busqueda);
+	List<Producto> buscarPorProveedor(@Param("busqueda") Integer busqueda);
 
 
 }

@@ -45,6 +45,19 @@ public class ProductoServiceImpl implements ProductoService{
         return productoRepository.findById(id).get();
     }
 
+	@Override
+	public List<Producto> buscarPorNombre(String busqueda) {
+		// TODO Auto-generated method stub
+		//throw new UnsupportedOperationException("Unimplemented method 'buscarPorNombre'");
+		return productoRepository.buscarPorNombre(busqueda);
+	}
+
+	@Override
+	public List<Producto> buscarPorProveedor(Integer busqueda) {
+	
+		return productoRepository.buscarPorProveedor(busqueda);
+	}
+
 	
 
 

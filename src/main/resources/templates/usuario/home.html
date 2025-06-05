@@ -82,7 +82,12 @@
                   </div> -->
                   <p class="name mb-1 fw-bold" th:text="${t.nombre}">Nombre</p>
                   <!-- <span class="position text-muted mb-3" th:text="${t.rol}">Rol</span> -->
-                  <a href="#" class="btn btn-outline-primary btn-sm">Ver Productos</a>
+                  <form method="post" th:action="@{productosproveedor}" class="d-flex">
+                      <input type="hidden" th:value="${t.idproveedo}" name="idproveedo">
+                    <button class="btn btn-outline-primary btn-sm" type="submit" >Ver Productos</button>
+
+                  </form>
+                 <!--  <a class="btn btn-sm btn-warning" th:href="@{/productos/edit/{id} (id=${producto.id})}" >Editar</a> -->
                 </div>
               </div>
             </div>

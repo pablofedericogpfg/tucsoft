@@ -8,11 +8,11 @@
           >Nombre Aplicacion</a
         >
         <!-- Barra de BUsqueda -->
-        <form method="post" action="#" class="d-flex">
+        <form method="post" th:action="@{/search}" class="d-flex">
           <input
             type="search"
-            name=""
-            id=""
+            name="nombre"
+            id="nombre"
             class="form-control me-2"
             placeholder="Buscar"
             aria-label="Buscar"

@@ -23,6 +23,7 @@ import com.tucusoft.tucsoft.model.DetalleOrden;
 import com.tucusoft.tucsoft.model.Menu;
 import com.tucusoft.tucsoft.model.Orden;
 import com.tucusoft.tucsoft.model.Producto;
+import com.tucusoft.tucsoft.model.Proveedor;
 import com.tucusoft.tucsoft.model.Usuario;
 import com.tucusoft.tucsoft.service.DetalleOrdenService;
 import com.tucusoft.tucsoft.service.ProductoService;
@@ -34,21 +35,18 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @Controller
 @RequestMapping("/")
 public class HomeController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
-  
-
     @Autowired
     private ProductoService productoService;
 
     @Autowired
     private ProveedorService proveedorService;
- 
+
     @Autowired
     private UsuarioService usuarioService;
 
@@ -57,10 +55,10 @@ public class HomeController {
 
     @Autowired
     private DetalleOrdenService detalleOrdenService;
- 
-  private List<DetalleOrden> detalleOrdenes = new ArrayList<DetalleOrden>();
+
+    private List<DetalleOrden> detalleOrdenes = new ArrayList<DetalleOrden>();
     private Orden orden = new Orden();
-    //private  Usuario usuario = usuarioService.get(2).get();
+    // private Usuario usuario = usuarioService.get(2).get();
     private Usuario usuario = Usuario.builder().id(2).nombre("Usuario").email("").direccion("Junin 785").build();
     private String homedelusuario = "";
     private String appname = "Ecomerce Prueba";
@@ -72,13 +70,16 @@ public class HomeController {
         session.setAttribute("homedelusuario", homedelusuario);
         session.setAttribute("appname", appname);
         session.setAttribute("usuario", usuario);
-
+        session.setAttribute("menus", menus);
         // model.addAttribute("usuario", "USUARIO");
-        model.addAttribute("productos", productoService.findAll());
-        model.addAttribute("proveedores", proveedorService.findAll());
+       List<Proveedor> proveedores=proveedorService.findAll();
+        model.addAttribute("proveedores",proveedores );
+        //LOGGER.info("IDPROVEEDOR {}",productoService.buscarPorProveedor(proveedores.get(0).getIdproveedo()));
+        model.addAttribute("productos",productoService.buscarPorProveedor(proveedores.get(0).getIdproveedo()) );
+
+
         // model.addAttribute("menu1", "Opciones");
 
-        session.setAttribute("menus", menus);
         model.addAttribute("cart", detalleOrdenes);
         model.addAttribute("orden", orden);
         LOGGER.info("detalle Ordenes Actualizado {}", detalleOrdenes);
@@ -160,7 +161,7 @@ public class HomeController {
         model.addAttribute("cart", detalleOrdenes);
         model.addAttribute("orden", orden);
         return "usuario/carrito";
-        //return "usuario/home";
+        // return "usuario/home";
     }
 
     @GetMapping("carrito")
@@ -173,7 +174,7 @@ public class HomeController {
 
     @PostMapping("cartcarrito")
     @ResponseBody
-    public String addCartCarrito(@RequestParam Integer id, @RequestParam double cantidad,Model model ) {
+    public String addCartCarrito(@RequestParam Integer id, @RequestParam double cantidad, Model model) {
         // TODO: process POST request
 
         Producto producto = productoService.get(id).get();
@@ -197,13 +198,17 @@ public class HomeController {
 
         LOGGER.info("Items de Detalleordenes {}", detalleOrdenes);
 
-     /*    Context context = new Context();
-        context.setVariable("cart", detalleOrdenes);
-        context.setVariable("orden", orden);
-
-        
-
-        String totalHtml = templateEngine.process("usuario/fragments/totalcart :: totalFragment", context); */
+        /*
+         * Context context = new Context();
+         * context.setVariable("cart", detalleOrdenes);
+         * context.setVariable("orden", orden);
+         * 
+         * 
+         * 
+         * String totalHtml =
+         * templateEngine.process("usuario/fragments/totalcart :: totalFragment",
+         * context);
+         */
         model.addAttribute("cart", detalleOrdenes);
         model.addAttribute("orden", orden);
         // return "usuario/carrito";
@@ -225,23 +230,47 @@ public class HomeController {
         return "usuario/resumenorden";
     }
 
-  @GetMapping("saveorder")
-  public String saveorder() {
-    Date fechaCreacion=new Date();
-    orden.setFechaCreacion(fechaCreacion);
-    orden.setNumero( ordenService.generarNumeroOrden());
-    orden.setUsuario(usuario);
-    //aparentemente no hace falta asignar orden xq pasa como referencia
-    ordenService.save(orden);
-    for(DetalleOrden dt:detalleOrdenes){
-        dt.setOrden(orden);
-        detalleOrdenService.save(dt);
-    }
-    orden=new Orden();
-    detalleOrdenes.clear();
+    @GetMapping("saveorder")
+    public String saveorder() {
+        Date fechaCreacion = new Date();
+        orden.setFechaCreacion(fechaCreacion);
+        orden.setNumero(ordenService.generarNumeroOrden());
+        orden.setUsuario(usuario);
+        // aparentemente no hace falta asignar orden xq pasa como referencia
+        ordenService.save(orden);
+        for (DetalleOrden dt : detalleOrdenes) {
+            dt.setOrden(orden);
+            detalleOrdenService.save(dt);
+        }
+        orden = new Orden();
+        detalleOrdenes.clear();
 
+        return "redirect:/";
+    }
+
+    @PostMapping("search")
+    public String seachProducto(@RequestParam String nombre, Model model) {
+        // TODO: process POST request
+        LOGGER.info(" nombre recibido filtro {}", nombre);
+        model.addAttribute("cart", detalleOrdenes);
+        model.addAttribute("orden", orden);
+        model.addAttribute("productos",productoService.buscarPorNombre("%"+nombre.trim().toUpperCase()+"%"));
+        model.addAttribute("proveedores", proveedorService.findAll());
+        // model.addAttribute("menu1", "Opciones");
+        return "usuario/home";
+    }
+
+    @PostMapping("productosproveedor")
+    public String productosProvedor(@RequestParam Integer idproveedo, Model model) {
+        LOGGER.info(" provedor recibido filtro {}", idproveedo);
+        model.addAttribute("cart", detalleOrdenes);
+        model.addAttribute("orden", orden);
+        model.addAttribute("productos",productoService.buscarPorProveedor(idproveedo));
+        model.addAttribute("proveedores", proveedorService.findAll());
+        // model.addAttribute("menu1", "Opciones");
+        return "usuario/home";   
+        
+    }
     
-      return "redirect:/";
-  }
-  
+
 }
